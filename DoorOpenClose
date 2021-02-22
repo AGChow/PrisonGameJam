@@ -1,0 +1,38 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DoorOpenClose : MonoBehaviour
+{
+    public GameObject door;
+    public bool doorOpen;
+    // Start is called before the first frame update
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (doorOpen == true)
+        {
+            OpenDoor();
+        }
+
+        else if (doorOpen == false)
+        {
+            CloseDoor();
+        }
+    }
+
+    public void OpenDoor()
+    {
+        door.transform.localPosition =  new Vector3(-5, 0, 0);
+
+    }
+
+    public void CloseDoor()
+    {
+        door.transform.localPosition = new Vector3(0, 0, 0);
+    }
+}
