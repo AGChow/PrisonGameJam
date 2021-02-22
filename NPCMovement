@@ -1,0 +1,113 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class NPCMovement : MonoBehaviour
+{
+    public bool touched = false;
+
+    public float x;
+    public float z;
+    public float speed;
+    public float topSpeed;
+
+    public GameObject player;
+    private Vector3 playerPos;
+    public Rigidbody rb;
+    public bool follow;
+    public bool huddle;
+    // Start is called before the first frame update
+    void Start()
+    {
+        touched = false;
+        rb = GetComponent<Rigidbody>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        playerPos = player.transform.position;
+
+        if (touched == true && follow == true && huddle == false)
+        {
+            x = Input.GetAxis("Horizontal");
+            z = Input.GetAxis("Vertical");
+
+
+            rb.AddForce(x * speed * Time.deltaTime, 0, z * speed * Time.deltaTime);
+
+
+            if (rb.velocity.magnitude > topSpeed)
+            {
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, topSpeed);
+            }
+
+
+            if (x == 0 & z == 0)
+            {
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
+
+            }
+        }
+        else
+        {
+            //dont move
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (follow == false)
+            {
+                follow = true;
+            }
+
+            else if (follow == true)
+            {
+                follow = false;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            huddle = true;
+
+        }
+
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            huddle = false;
+        }
+
+        if (touched == true && huddle == true && follow == true)
+        {
+            x = (player.transform.position.x - transform.position.x);
+            z = (player.transform.position.z - transform.position.z);
+
+            rb.AddForce(x * speed * Time.deltaTime, 0, z * speed * Time.deltaTime);
+
+
+            if (rb.velocity.magnitude > topSpeed)
+            {
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, topSpeed);
+            }
+        }
+        else if (huddle == false)
+        {
+            //do nothing
+        }
+
+        
+        
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            touched = true;
+            follow = true;
+        }
+    }
+}
