@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Button : MonoBehaviour
+{
+    public GameObject door;
+    public DoorOpenClose doorOpenClose;
+
+    public bool buttonDown;
+
+    public bool singleuse;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (buttonDown == true)
+        {
+            door.GetComponent<DoorOpenClose>().doorOpen = true;
+        }
+
+        else if (buttonDown == false)
+        {
+            door.GetComponent<DoorOpenClose>().doorOpen = false;
+
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player" || other.tag == "NPC" || other.tag == "PushObject")
+        {
+            buttonDown = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player" || other.tag == "NPC" || other.tag == "PushObject")
+        {
+            if (singleuse == true)
+            {
+                buttonDown = false;
+            }
+        }
+    }
+}
